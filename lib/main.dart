@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
-import 'welcome_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:myflutter_app/Routes/routes.dart';
+import 'package:myflutter_app/service_locator.dart';
+import 'firebase_options.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  setupLocator();
   runApp(MyApp());
 }
 
@@ -10,10 +16,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: AppRouter.router,
       debugShowCheckedModeBanner: false,
-      title: 'Flutter App',
-      home: WelcomePage(),
     );
   }
 }
