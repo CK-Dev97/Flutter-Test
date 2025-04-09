@@ -7,7 +7,7 @@ import 'package:myflutter_app/Pages/signup_page.dart';
 import 'package:myflutter_app/Pages/home_page.dart';
 
 class AppRouter {
-  static final GoRouter router = GoRouter(
+  final GoRouter router = GoRouter(
     routes: [
       GoRoute(path: '/', builder: (context, state) => const WelcomePage()),
       GoRoute(path: '/login', builder: (context, state) => const LoginPage()),

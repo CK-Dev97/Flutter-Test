@@ -17,7 +17,7 @@ class _WelcomePageState extends State<WelcomePage> {
         fit: StackFit.expand,
         children: [
           // Full-screen background image
-          Image.asset('assets/welcom.jpg', fit: BoxFit.cover),
+          Image.asset('assets/jjjkjkji.jpg', fit: BoxFit.cover),
           // Content
           Center(
             child: Column(
@@ -25,14 +25,14 @@ class _WelcomePageState extends State<WelcomePage> {
               children: [
                 Text(
                   'Welcome To ',
-                  style: GoogleFonts.breeSerif(
-                    fontSize: 30,
+                  style: GoogleFonts.cinzel(
+                    fontSize: 50,
                     fontWeight: FontWeight.bold,
-                    color: const Color.fromARGB(255, 66, 2, 66),
+                    color: const Color.fromARGB(255, 255, 255, 255),
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 720),
+                const SizedBox(height: 600),
                 ElevatedButton(
                   onPressed: () {
                     GoRouter.of(context).go("/login"); // Navigate to Login Page

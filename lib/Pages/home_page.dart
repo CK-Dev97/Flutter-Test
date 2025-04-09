@@ -3,53 +3,15 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:myflutter_app/services/auth_service.dart';
 import 'package:myflutter_app/service_locator.dart';
-import 'package:myflutter_app/services/api_service.dart';
+import 'package:myflutter_app/providers/home_provider.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  final _apiService = locator<ApiService>();
-  List<dynamic> _images = [];
-  bool _isLoading = true;
-  String _errorMessage = '';
-  bool _isRefreshing = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadImages();
-  }
-
-  Future<void> _loadImages() async {
-    try {
-      final images = await _apiService.fetchImages();
-      setState(() {
-        _images = images;
-        _isLoading = false;
-        _isRefreshing = false;
-      });
-    } catch (e) {
-      setState(() {
-        _errorMessage = e.toString();
-        _isLoading = false;
-        _isRefreshing = false;
-      });
-    }
-  }
-
-  Future<void> _refreshImages() async {
-    setState(() => _isRefreshing = true);
-    await _loadImages();
-  }
-
-  void _showFullScreenImage(Map<String, dynamic> image) {
+  void _showFullScreenImage(BuildContext context, Map<String, dynamic> image) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder:
@@ -60,7 +22,6 @@ class _HomePageState extends State<HomePage> {
                   IconButton(
                     icon: const Icon(Icons.download),
                     onPressed: () {
-                      // Implement download functionality
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Downloading ${image['id']}')),
                       );
@@ -105,7 +66,6 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           const SizedBox(height: 16),
-                          // Stats Row
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
@@ -124,7 +84,6 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                           const SizedBox(height: 16),
-                          // Additional Details
                           if (image['alt_description'] != null) ...[
                             Text(
                               image['alt_description'],
@@ -154,7 +113,6 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ],
                           const SizedBox(height: 16),
-                          // Tags
                           if (image['tags'] != null &&
                               image['tags'].isNotEmpty) ...[
                             const Divider(),
@@ -203,6 +161,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<HomeProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Creative Wallpapers'),
@@ -216,37 +176,40 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: _buildBody(),
+      body: _buildBody(context, provider),
       floatingActionButton: FloatingActionButton(
-        onPressed: _refreshImages,
+        onPressed: provider.refreshImages,
         child:
-            _isRefreshing
+            provider.isRefreshing
                 ? const CircularProgressIndicator(color: Colors.white)
                 : const Icon(Icons.refresh),
       ),
     );
   }
 
-  Widget _buildBody() {
-    if (_isLoading) {
+  Widget _buildBody(BuildContext context, HomeProvider provider) {
+    if (provider.isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
 
-    if (_errorMessage.isNotEmpty) {
+    if (provider.errorMessage.isNotEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(_errorMessage),
+            Text(provider.errorMessage),
             const SizedBox(height: 20),
-            ElevatedButton(onPressed: _loadImages, child: const Text('Retry')),
+            ElevatedButton(
+              onPressed: provider.loadImages,
+              child: const Text('Retry'),
+            ),
           ],
         ),
       );
     }
 
     return RefreshIndicator(
-      onRefresh: _refreshImages,
+      onRefresh: provider.refreshImages,
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
@@ -255,11 +218,11 @@ class _HomePageState extends State<HomePage> {
           childAspectRatio: 0.7,
         ),
         padding: const EdgeInsets.all(8),
-        itemCount: _images.length,
+        itemCount: provider.images.length,
         itemBuilder: (context, index) {
-          final image = _images[index];
+          final image = provider.images[index];
           return GestureDetector(
-            onTap: () => _showFullScreenImage(image),
+            onTap: () => _showFullScreenImage(context, image),
             child: _buildImageCard(image),
           );
         },
