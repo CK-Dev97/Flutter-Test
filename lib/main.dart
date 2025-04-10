@@ -40,7 +40,6 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => HomeProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
-        // Add other providers here as needed
       ],
       child: MaterialApp.router(
         routerConfig: AppRouter().router,
@@ -52,10 +51,9 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         darkTheme: ThemeData.dark(),
-        themeMode: ThemeMode.system, // Follow system theme
-        restorationScopeId: 'app', // For state restoration
+        themeMode: ThemeMode.system,
+        restorationScopeId: 'app',
         builder: (context, child) {
-          // Add global overlays or dialogs here if needed
           return child ?? const SizedBox.shrink();
         },
       ),

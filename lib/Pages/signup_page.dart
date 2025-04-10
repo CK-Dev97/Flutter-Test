@@ -1,9 +1,11 @@
 // ignore_for_file: library_private_types_in_public_api, deprecated_member_use
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:myflutter_app/services/auth_service.dart';
 import 'package:myflutter_app/service_locator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -39,6 +41,17 @@ class _SignUpPageState extends State<SignUpPage> {
           _passwordController.text.trim(),
         );
         if (user != null) {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('user_name', _nameController.text.trim());
+          await prefs.setString('user_email', _emailController.text.trim());
+          // Log the values to the console
+          if (kDebugMode) {
+            print('User Name: ${_nameController.text.trim()}');
+          }
+          if (kDebugMode) {
+            print('User Email: ${_emailController.text.trim()}');
+          }
+
           if (mounted) context.go('/login');
         }
       } catch (e) {

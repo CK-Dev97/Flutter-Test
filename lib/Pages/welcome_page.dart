@@ -17,47 +17,66 @@ class _WelcomePageState extends State<WelcomePage> {
         fit: StackFit.expand,
         children: [
           // Full-screen background image
-          Image.asset('assets/jjjkjkji.jpg', fit: BoxFit.cover),
+          Image.asset('assets/Nature.jpg', fit: BoxFit.cover),
+
           // Content
-          Center(
+          SingleChildScrollView(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text(
-                  'Welcome To ',
-                  style: GoogleFonts.cinzel(
-                    fontSize: 50,
-                    fontWeight: FontWeight.bold,
-                    color: const Color.fromARGB(255, 255, 255, 255),
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 600),
-                ElevatedButton(
-                  onPressed: () {
-                    GoRouter.of(context).go("/login"); // Navigate to Login Page
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 32,
-                      vertical: 19,
-                    ),
-                    backgroundColor: const Color.fromARGB(255, 78, 1, 70),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(82),
-                    ),
-                    elevation: 5,
-                  ),
+                const SizedBox(height: 170),
+                Center(
                   child: Text(
-                    'Join With Us ',
-                    style: GoogleFonts.ibmPlexSans(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
+                    'Welcome To ',
+                    style: GoogleFonts.cinzel(
+                      fontSize: 50,
+                      fontWeight: FontWeight.bold,
+                      color: const Color.fromARGB(255, 255, 255, 255),
                     ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ],
+            ),
+          ),
+
+          Positioned(
+            bottom: 40,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 60),
+                child: SizedBox(
+                  width: 280, // Set a fixed width for the button
+                  child: ElevatedButton(
+                    onPressed: () {
+                      GoRouter.of(
+                        context,
+                      ).go("/login"); // Navigate to Login Page
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 25,
+                        vertical: 10,
+                      ),
+                      backgroundColor: const Color.fromARGB(255, 78, 1, 70),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(82),
+                      ),
+                      elevation: 5,
+                    ),
+                    child: Text(
+                      'Join With Us ',
+                      style: GoogleFonts.ibmPlexSans(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ),
           ),
         ],
